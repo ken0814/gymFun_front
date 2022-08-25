@@ -5,10 +5,11 @@ n-modal(
   v-model:show="form.showModal"
   :mask-closable="true"
   preset="card"
-)
-  h3 報名審查
+)#modal
+  h1 報名審查
   n-form(
     :model="form"
+    @submit.prevent="submitForm"
   )
     n-form-item(
       path="status"
@@ -17,7 +18,12 @@ n-modal(
       n-select(
         v-model:value="form.status"
         :options="options"
+        placeholder="請選擇"
       )
+    n-button(
+      color="#D74B4B"
+      attr-type="submit"
+    ) 送出
 n-table(:bordered="false" :single-line="false")#table
   thead
     tr
@@ -58,6 +64,11 @@ const doc = reactive([])
 
 const options = [
   {
+    label: "審查中",
+    value: 0,
+    disabled: form.status !== 0 ? true : false
+  },
+  {
     label: "審查通過",
     value: 1,
   },
@@ -81,6 +92,29 @@ const openModal = (_id, idx) => {
   form.idx = idx
   form.showModal = true
   form.submitting = false
+}
+
+const submitForm = async () => {
+  form.submitting = true
+  const data = {
+    status: form.status
+  }
+  try {
+    await apiAuth.patch('/users/history/' + form._id, data)
+    Swal.fire({
+      icon: 'success',
+      title: '成功',
+      text: '成功送出'
+    })
+    form.showModal = false
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+    form.showModal = false
+  }
 }
 
 const init = async () => {
@@ -120,5 +154,10 @@ i
 
 button
   border-radius: 20px
+
+#modal
+  h1
+    position: absolute
+    top: 7.5px
 
 </style>
