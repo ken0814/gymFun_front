@@ -66,7 +66,21 @@ export const useUserStore = defineStore({
       this.token = ''
       this.account = ''
       this.role = 0
-      this.cart = 0
+    },
+    async getUser () {
+      if (this.token.length === 0) return
+      try {
+        const { data } = await apiAuth.get('/users')
+        this.account = data.result.account
+        this.role = data.result.role
+        this.cart = data.result.cart
+      } catch (error) {
+        this.logout()
+      }
     }
+  },
+  persist: {
+    key: 'vite-shop',
+    paths: ['token']
   }
 })

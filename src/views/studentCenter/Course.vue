@@ -7,13 +7,40 @@ n-table(:bordered="false" :single-line="false")#table
       th 名稱
       th 教練
       th 報名時間
-      th 課程狀態
+      th 報名狀態
   tbody
-    td(colspan='4' style="text-align: center;") 沒有課程
+    tr(v-if="histories.length > 0" v-for="(history, idx) in histories" :key="history._id")
+      td {{ history.course.name }}
+      td {{ history.coachDocument.name }}
+      td {{ new Date(history.history.date).toLocaleDateString() }}
+      td {{ history.history.status === 0 ? '審查中' : history.history.status === 1 ? "報名成功" : history.history.status === 2 ? "報名未通過" : '' }}
+    tr(v-else) 
+      td(colspan='4' style="text-align: center") 沒有課程
 
 </template>
 
 <script setup>
+import Swal from 'sweetalert2'
+import { ref, reactive } from 'vue'
+import { apiAuth } from '../../plugins/axios'
+
+const histories = reactive([])
+
+const init = async () => {
+  try {
+    const { data } = await apiAuth.get('/users/histories')
+    histories.push(...data.result.histories)
+  } catch (error) {
+    console.log(error)
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
+    })
+  }
+}
+
+init()
 
 </script>
 
@@ -21,41 +48,13 @@ n-table(:bordered="false" :single-line="false")#table
 #section01
   margin-bottom: 5px
 
-#admin-course-modal
-  h3
-    position: absolute
-    top: 15px
-
-.n-card-header__main
-  color: #333 !important
-  font-weight: bold !important
-
-#modalBtnSection
-  padding-right: 5px
-  .n-button:nth-child(2)
-    margin-left: 5px
-
-.n-upload-dragger
-  color: #333
-
 #table
+  text-align: center
   thead
     th
       font-size: .9rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
-  tbody
-    td
-      img
-        width: 80px
-        height: 80px
-        object-fit: cover
-        margin: auto
-#on
-  p
-    font-weight: bold
-    font-size: .8rem
-    margin-left: 5px
 
 </style>

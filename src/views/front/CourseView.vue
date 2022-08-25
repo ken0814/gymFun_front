@@ -21,7 +21,7 @@
       n-gi(v-else)
         n-card 沒有課程
 n-modal(
-  v-model:show="showModal"
+  v-model:show="form.showModal"
   preset="card"
   style="width:800px;"
 )
@@ -35,7 +35,10 @@ n-modal(
           h3 課程地點: {{ form.place }}
           h3 課程時段: {{ form.time }}
           h3 課程價錢: $ {{ form.price }} / 堂
-          n-button(color="#D74B4B") 立即報名
+          n-button(
+            color="#D74B4B"
+            @click="registration()"
+          ) 立即報名
       n-gi
         div
           h2 課程介紹
@@ -46,9 +49,7 @@ n-modal(
 <script setup>
 import Swal from 'sweetalert2';
 import { reactive } from 'vue';
-import { api } from '../../plugins/axios';
-
-const showModal = ref(false)
+import { api, apiAuth } from '../../plugins/axios';
 
 const courses = reactive([])
 
@@ -68,8 +69,12 @@ const form = reactive({
   showModal: false
 })
 
+const data = reactive({
+  course: '',
+  status: 0
+})
+
 const openDialog = (_id, idx) => {
-  showModal.value = true
   form._id = _id
   if (idx > -1) {
     form.name = courses[idx].name
@@ -87,6 +92,26 @@ const openDialog = (_id, idx) => {
   form.submitting = false
 }
 
+const registration = async () => {
+  data.course = form._id.toString()
+  try {
+    await apiAuth.post('/registration', data)
+    form.showModal = false
+    Swal.fire({
+      icon: 'success',
+      title: '成功',
+      text: '報名成功'
+    })
+  } catch (error) {
+    form.showModal = false
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: (error.response.data.message === 'No auth token') ? '登入後才能報名' : (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
+    })
+  }
+}
+
 const init = async () => {
   try {
     const { data } = await api.get('/courses/')
@@ -95,7 +120,7 @@ const init = async () => {
     Swal.fire({
       icon: 'error',
       title: '失敗',
-      text: '伺服器錯誤'
+      text: (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
     })
   }
 }

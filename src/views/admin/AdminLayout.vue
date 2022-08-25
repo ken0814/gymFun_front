@@ -33,7 +33,6 @@ nav
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/user'
-import { FacebookSquare, Instagram, TwitterSquare, Line } from '@vicons/fa'
 
 const user = useUserStore()
 const { logout } = user

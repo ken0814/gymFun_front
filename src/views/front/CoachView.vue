@@ -80,14 +80,14 @@ const openDialog = (_id, idx) => {
 const init = async () => {
   try {
     const { data } = await api.get('/users/coach')
-    for (const idx in data.result) {
-      if (data.result[idx].profile[0].document.sell === true) coachs.push(...data.result[idx].profile)
+    for (const idx in data.final) {
+      if (data.final[idx].profile[0].document.sell === true) coachs.push(...data.final[idx].profile)
     }
   } catch (error) {
     Swal.fire({
       icon: 'error',
       title: '失敗',
-      text: '伺服器錯誤'
+      text: (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
     })
   }
 }
