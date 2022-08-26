@@ -1,6 +1,6 @@
 <template lang="pug">
 #section01.flex.justify-content-space-between
-  h1 我的課程
+  h1 課程管理
   n-button(color="#D74B4B" @click="openDialog('', -1)") 新增
 n-modal(
   v-model:show="form.showModal"
@@ -86,7 +86,7 @@ n-modal(
     #modalBtnSection.flex.justify-content-flex-end
       n-button(
         attr-type="submit"
-        color="#D74B4B"
+        color="#475F77"
         :loading="form.submitting"
         @click="close"
       ) 送出
@@ -97,35 +97,40 @@ n-modal(
         @click="del(form._id, form.idx)"
       ) 刪除
       n-button(
-        color="#354B5E"
+        color="#DCDDD8"
         :disable="form.submitting"
         @click="close"
       ) 取消
-
-n-table(:bordered="false" :single-line="false")#table
-  thead
-    tr
-      th 課程圖片
-      th 課程名稱
-      th 編輯
-  tbody
-    tr(v-if="courses.length > 0" v-for='(course, idx) in courses' :key="course._id")
-      td 
-        img(:src="course.image")
-      td {{ course.name }}
-      td
-        n-button(
-          @click="openDialog(course._id, idx)"
-          color="#D74B4B"
-        ) 編輯
-    tr(v-else)
-      td(colspan='4' style="text-align: center;") 沒有課程
-
+#section02
+  n-table(:bordered="false" :single-line="false")#table
+    thead
+      tr
+        th 課程圖片
+        th 課程名稱
+        th 編輯
+    tbody
+      tr(v-if="courses.length > 0" v-for='(course, idx) in sliceCourses' :key="course._id")
+        td 
+          img(:src="course.image")
+        td {{ course.name }}
+        td(v-if="currentPage === 1")
+          n-button(
+            @click="openDialog(course._id, idx)"
+            color="#475F77"
+          ) 編輯
+        td(v-else="currentPage > 1")
+          n-button(
+            @click="openDialog(course._id, idx + ((currentPage - 1) * pageSize))"
+            color="#475F77"
+          ) 編輯
+      tr(v-else)
+        td(colspan='4' style="text-align: center;") 沒有課程
+n-pagination(v-model:page="currentPage" :page-count="Math.ceil(courses.length / pageSize)")
 
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import Swal from 'sweetalert2'
 import { apiAuth } from '@/plugins/axios'
 
@@ -133,6 +138,12 @@ const courses = reactive([])
 
 const courseId = reactive({
   course: ''
+})
+
+const currentPage = ref(1)
+const pageSize = 5
+const sliceCourses = computed(() => {
+  return courses.slice((currentPage.value * pageSize) - pageSize, (currentPage.value * pageSize))
 })
 
 const form = reactive({
@@ -210,6 +221,8 @@ const submitForm = async () => {
   try {
     if (form._id.length === 0) {
       const { data } = await apiAuth.post('/courses', fd)
+      console.log(data)
+      courses.push(data.result)
       courseId.course = data.result._id
       await apiAuth.post('users/course', courseId)
       Swal.fire({
@@ -218,7 +231,8 @@ const submitForm = async () => {
         text: '新增成功'
       })
     } else {
-      await apiAuth.patch('/courses/' + form._id, fd)
+      const { data } = await apiAuth.patch('/courses/' + form._id, fd)
+      courses[form.idx] = data.result
       Swal.fire({
         icon: 'success',
         title: '成功',
@@ -307,6 +321,8 @@ init()
   h3
     position: absolute
     top: 15px
+  :deep .n-form-item-label
+    color: #354B5E !important
 
 .n-card-header__main
   color: #333 !important
@@ -319,12 +335,13 @@ init()
   text-align: center
   thead
     th
-      font-size: .9rem
+      font-size: 1rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
   tbody
     td
+      font-size: 15px
       img
         width: 80px
         height: 80px
@@ -338,4 +355,16 @@ init()
 
 .n-button
   margin-right: 5px
+
+#section02
+  height: 575px
+
+.n-pagination
+  display: flex
+  justify-content: center
+  margin-top: 20px
+
+#modalBtnSection
+  button:nth-child(3)
+    color: #333
 </style>

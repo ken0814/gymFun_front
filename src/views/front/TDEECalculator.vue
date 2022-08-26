@@ -1,6 +1,6 @@
 <template lang="pug">
 .container.flex
-  n-grid(cols="xs:1 xl:2" responsive="screen")
+  n-grid(cols="xs:1 xxl:2" responsive="screen")
     n-gi
       #section01.flex
         div
@@ -101,6 +101,7 @@
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
   p Copyright &copy; 2022 kenli
+  p 網站為學習用途，無商業使用。圖片均取自網路
 </template>
 
 <script setup>
@@ -251,7 +252,7 @@ const submitForm = () => {
   a
     height: 25px
 
-@media (max-width: 1536px)
+@media (max-width: 1400px)
   .container
     height: 1300px
 

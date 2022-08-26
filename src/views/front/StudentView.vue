@@ -3,18 +3,19 @@
   #section01
     h1 學員列表
     hr
-    n-grid(cols="1 s:2 m:3 l:4" responsive="screen")
+    n-grid(cols="1 sm:2 md:3 lg:4" responsive="screen")
       n-gi(
         v-if='students.length > 0'
-        v-for='(student, idx) in students'
+        v-for='(student, idx) in sliceStudents'
         :key='student._id'
       )
         a(@click="openDialog(student._id, idx)")
           n-card
             template(#cover)
               img(:src="student.document.image")
-            h2 {{ student.name }} 
+            h2 {{ student.document.name }} 
       n-gi(v-else)
+    n-pagination(v-model:page="currentPage" :page-count="Math.ceil(students.length / pageSize)")
 n-modal(
   v-model:show="showModal"
   preset="card"
@@ -30,7 +31,7 @@ n-modal(
       h3 教學時段: {{ form.time }}
       h3 擅長項目: {{ form.findCourse }}
       h3 自我介紹: {{ form.introduction }}
-      n-button(color="#D74B4B") 聯絡我
+      n-button(color="#475F77") 傳送訊息
 
 </template>
 
@@ -42,6 +43,12 @@ import { api } from '../../plugins/axios';
 const showModal = ref(false)
 
 const students = reactive([])
+
+const currentPage = ref(1)
+const pageSize = 8
+const sliceStudents = computed(() => {
+  return students.slice((currentPage.value * pageSize) - pageSize, (currentPage.value * pageSize))
+})
 
 const form = reactive({
   _id: '',
@@ -99,13 +106,33 @@ init()
 .n-grid
   gap:30px !important
 
+.n-card
+  background: rgba(255,255,255, 0.4)
+  border: none
+  border-radius: 15px
+  box-shadow: 0 0 10px #475F77
+
+  text-align: center
+  img
+    width: 150px
+    height: 150px
+    object-fit: cover
+    border-radius: 50%
+    margin: 20px auto
+
+.n-card:hover
+  transform: scale(1.02)
+  transition: .3s
+  cursor: pointer
+
 #container
   width: 60%
-  padding: 80px 0 0 0
+  padding: 30px 0 0 0
   margin: auto
 
 #section01
   width: 100%
+  margin-bottom: 50px
   h1
     font-size: 1.8rem
     color: #354B5E
@@ -124,38 +151,34 @@ init()
     height: 200px
     object-fit: cover
     border-radius: 5px
-    margin: 0 0 15px 0
-
-.n-card
-  background: rgba(255,255,255, 0.4)
-  border: none
-  border-radius: 15px
-  box-shadow: 0 0 10px #475F77
-
-  text-align: center
-  img
-    width: 150px
-    height: 150px
-    object-fit: cover
-    border-radius: 50%
-    margin: 20px auto
-
-.n-card:hover
-  transform: scale(1.02)
-  transition: .3s
+    margin-bottom: 10px
+  h2
+    margin-top: 10px
+  button
+    margin-top: 10px
+    font-size: 1rem
+    
 
 #modalSection01
   h1
     position: absolute
-    top: 19.4px
-  h3
-    font-size: 1rem
-    // letter-spacing: 1px
-  button
-    margin: auto
-    margin-top: 10px
-    font-size: 1rem
+    top: 18.4px
+
+#btnSection
+  width: 100%
+  margin: 15px 0
+
+.n-grid
+  // height: 830px
   div
-    width: 100%
-    height: 150px
+    height: 100%
+
+.n-pagination
+  display: flex
+  justify-content: center
+  margin: 20px
+
+@media (max-width: 1200px)
+  #container
+    width: 85%
 </style>

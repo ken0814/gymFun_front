@@ -52,7 +52,7 @@ n-modal(
     #modalBtnSection.flex.justify-content-flex-end
       n-button(
         attr-type="submit"
-        color="#D74B4B"
+        color="#475F77"
         :loading="form.submitting"
         @click="close"
       ) 送出
@@ -63,7 +63,7 @@ n-modal(
         @click="del(form._id, form.idx)"
       ) 刪除
       n-button(
-        color="#354B5E"
+        color="#DCDDD8"
         :disable="form.submitting"
         @click="close"
       ) 取消
@@ -80,7 +80,7 @@ n-table(:bordered="false" :single-line="false")#table
       td {{ advertise.name }}
       td
         n-button(
-          color="#D74B4B"
+          color="#475F77"
           @click="openDialog(advertise._id, idx)"
         ) 編輯
     tr(v-else)
@@ -214,12 +214,13 @@ init()
   text-align: center
   thead
     th
-      font-size: .9rem
+      font-size: 1rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
   tbody
     td
+      font-size: 15px
       img
         width: 80px
         height: 80px
@@ -228,4 +229,8 @@ init()
 
 .n-button
   margin-right: 5px
+
+#modalBtnSection
+  button:nth-child(3)
+    color: #333
 </style>

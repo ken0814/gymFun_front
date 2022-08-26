@@ -7,7 +7,8 @@ nav
         color="#354B5E"
       )
         n-icon(size="25" color="#fff" :component="Bars")
-      h1 GYMFUN
+      RouterLink(to="/")
+        h1 GYMFUN
     RouterLink(to="/")
       img(src="@/assets/images/logo.svg")#logo
     #nav_button
@@ -24,7 +25,7 @@ nav
       RouterLink(to="/login")
         n-button(v-if='!isLogin' color="#D74B4B") 登入
       RouterLink(to="/admin/")
-        n-button(v-if='isAdmin' color='#354B5E') 管理員後台
+        n-button(v-if='isAdmin' color='#354B5E') 後台管理
       RouterLink(to="/student/")
         n-button(v-if='isLogin && !isAdmin && isStudent' color='#354B5E') 學員中心
       RouterLink(to="/coach/")
@@ -88,13 +89,13 @@ nav
   top: 0
   z-index: 1000
   .nav_container
-    width: calc( 60% - 15px )
+    width: 60%
     height: 100%
     margin: auto
     display: flex
     justify-content: space-between
     align-items: center
-    padding: 5px
+    padding: 0 5px
     img
       width: 100px
       height: 50px
@@ -104,9 +105,11 @@ nav
 #router
   position: relative
   top: 74px
-
+  
 #hamburger
   display: none
+  h1
+    color: #fff
 
 .n-drawer-content
   padding: 40px 0
@@ -124,13 +127,19 @@ nav
 
 @media (max-width: 1200px)
   #logo
-    display: none
   #nav_button
+  .nav_container
+    width: 100% !important
+    padding: 0 6% !important
+    // justify-content: flex-start !important
+
+@media (max-width: 803px)
+  #logo
     display: none
   #hamburger
     display: flex
     h1
       font-size: 1.5rem
-  .nav_container
-    width: 100%
+  #nav_button
+    display: none
 </style>

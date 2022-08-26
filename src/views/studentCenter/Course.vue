@@ -4,7 +4,7 @@
 n-table(:bordered="false" :single-line="false")#table
   thead
     tr
-      th 名稱
+      th 課程名稱
       th 教練
       th 報名時間
       th 報名狀態
@@ -52,9 +52,12 @@ init()
   text-align: center
   thead
     th
-      font-size: .9rem
+      font-size: 1rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
+  tbody
+    td
+      font-size: 15px
 
 </style>

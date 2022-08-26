@@ -5,6 +5,7 @@ n-modal(
   v-model:show="form.showModal"
   :mask-closable="true"
   preset="card"
+  style="width: 500px"
 )#modal
   h1 報名審查
   n-form(
@@ -13,35 +14,38 @@ n-modal(
   )
     n-form-item(
       path="status"
-      label="報名狀態"
+      label="審查結果"
     )
       n-select(
         v-model:value="form.status"
         :options="options"
         placeholder="請選擇"
       )
-    n-button(
-      color="#D74B4B"
-      attr-type="submit"
-    ) 送出
-n-table(:bordered="false" :single-line="false")#table
-  thead
-    tr
-      th 學員
-      th 報名課程
-      th 報名狀態
-      th 審查
-  tbody
-    tr(v-if="doc.length > 0" v-for="(item, idx) in doc" :key="item._id")
-      td {{ item.studentDocument.name }}
-      td {{ item.course.name }}
-      td {{ item.status === 0 ? "審查中" : item.status === 1 ? "報名成功" : item.status === 2 ? "報名請求退回" : "" }}
-      td 
-        n-button(color="#D74B4B" @click="openModal(item._id, idx)")
-          n-icon(size="25" color="#fff" :component="EditCalendarOutlined"
-        )
-    tr(v-else) 
-      td(colspan='4' style="text-align: center") 沒有課程 
+    #btnSection.flex.justify-content-flex-end
+      n-button(
+        color="#D74B4B"
+        attr-type="submit"
+      ) 送出
+#section02
+  n-table(:bordered="false" :single-line="false")#table
+    thead
+      tr
+        th 學員
+        th 報名課程
+        th 報名狀態
+        th 審查
+    tbody
+      tr(v-if="doc.length > 0" v-for="(item, idx) in sliceDoc" :key="item._id")
+        td {{ item.studentDocument.name }}
+        td {{ item.course.name }}
+        td {{ item.status === 0 ? "審查中" : item.status === 1 ? "報名成功" : item.status === 2 ? "報名請求退回" : "" }}
+        td 
+          n-button(color="#475F77" @click="openModal(item._id, idx + ((currentPage - 1) * pageSize))")
+            n-icon(size="25" color="#fff" :component="EditCalendarOutlined"
+          )
+      tr(v-else) 
+        td(colspan='4' style="text-align: center") 沒有課程
+n-pagination(v-model:page="currentPage" :page-count="Math.ceil(doc.length / pageSize)")
 
 </template>
 
@@ -62,12 +66,13 @@ const form = reactive({
 
 const doc = reactive([])
 
+const currentPage = ref(1)
+const pageSize = 5
+const sliceDoc = computed(() => {
+  return doc.slice((currentPage.value * pageSize) - pageSize, (currentPage.value * pageSize))
+})
+
 const options = [
-  {
-    label: "審查中",
-    value: 0,
-    disabled: form.status !== 0 ? true : false
-  },
   {
     label: "審查通過",
     value: 1,
@@ -81,7 +86,7 @@ const options = [
 const openModal = (_id, idx) => {
   form._id = _id
   if (idx > -1) {
-    form.status = doc[idx].status
+    // form.status = doc[idx].status
     form.courseName = doc[idx].course.name
     form.studentName = doc[idx].studentDocument.name
   } else {
@@ -96,16 +101,20 @@ const openModal = (_id, idx) => {
 
 const submitForm = async () => {
   form.submitting = true
-  const data = {
+  const dataForm = {
     status: form.status
   }
   try {
-    await apiAuth.patch('/users/history/' + form._id, data)
+    const { data } = await apiAuth.patch('/users/history/' + form._id, dataForm)
+    console.log(data.result)
+    console.log(doc[form.idx].status)
+    doc[form.idx].status = data.result.status
     Swal.fire({
       icon: 'success',
       title: '成功',
       text: '成功送出'
     })
+    form.status = null
     form.showModal = false
   } catch (error) {
     Swal.fire({
@@ -121,9 +130,7 @@ const init = async () => {
   try {
     const { data } = await apiAuth.get('/users//register')
     doc.push(...data.final)
-    console.log(doc)
   } catch (error) {
-    console.log(error)
     Swal.fire({
       icon: 'error',
       title: '失敗',
@@ -144,10 +151,13 @@ init()
   text-align: center
   thead
     th
-      font-size: .9rem
+      font-size: 1rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
+  tbody
+    td
+      font-size: 15px
 
 i
   font-size: 18px !important
@@ -158,6 +168,18 @@ button
 #modal
   h1
     position: absolute
-    top: 7.5px
+    top: 10.5px
+  :deep .n-form-item-label
+    font-size: 2rem
 
+#btnSection
+  padding: 0 5px
+
+#section02
+  height: 575px
+
+.n-pagination
+  display: flex
+  justify-content: center
+  margin-top: 20px
 </style>

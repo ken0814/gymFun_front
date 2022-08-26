@@ -45,6 +45,8 @@
             round
             :loading="loading"
           ) 登入
+        RouterLink(to="/register")#register
+          p 還沒註冊嗎?
 #footer.flex.D-column
   #footerIcon_box.flex
     a(href="https://fb.com")
@@ -56,6 +58,7 @@
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
   p Copyright &copy; 2022 kenli
+  p 網站為學習用途，無商業使用。圖片均取自網路
 </template>
 
 <script setup>
@@ -110,6 +113,10 @@ const login = () => {
 </script>
 
 <style lang="sass" scoped>
+
+#register
+  display: none
+
 .container
   width: 100%
   height: calc( 100vh - 144px )
@@ -176,4 +183,18 @@ const login = () => {
   p
     color: #fff
     font-size: .5rem
+
+@media (max-width: 1200px)
+  #section02
+    width: 42.5%
+  #section03
+    width: 42.5%
+
+@media (max-width: 803px)
+  #section02
+    display: none
+  #section03
+    width: 60%
+  #register
+    display: block
 </style>

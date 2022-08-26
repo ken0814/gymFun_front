@@ -3,55 +3,58 @@
   #section01
     h1 課程列表
     hr
-    n-grid(cols="1 s:2 l:4" responsive="screen")
+    n-grid(cols="1 sm:2 md:3 lg:4" responsive="screen")
       n-gi(
         v-if='courses.length > 0'
-        v-for='(course, idx) in courses'
+        v-for='(course, idx) in sliceCourses'
         :key='course._id'
       )
-        a(@click="openDialog(course._id, idx)")
+        a(@click="openDialog(course._id, idx + ((currentPage - 1) * pageSize))")
           n-card
             template(#cover)
               img(:src="course.image")
-            h3 {{ course.name }}
-            h4 運動項目: {{ course.category }}
-            h4 上課地點: {{ course.place }}
-            h4 上課時段: {{ course.time }}
-            h4 價錢: $ {{ course.price }} / 堂
+            h2 {{ course.name }}
+            h3 運動項目: {{ course.category }}
+            h3 上課地點: {{ course.place }}
+            h3 上課時段: {{ course.time }}
+            h3 價錢: $ {{ course.price }} / 堂
       n-gi(v-else)
         n-card 沒有課程
+    n-pagination(v-model:page="currentPage" :page-count="Math.ceil(courses.length / pageSize)")
 n-modal(
   v-model:show="form.showModal"
   preset="card"
-  style="width:800px;"
+  style="width:400px;"
 )
   #modal.flex.D-column
-    n-grid(cols="s:1 xxl:2" responsive="screen")
-      n-gi
-        #modalSection01.flex.D-column.align-items-flex-start
-          h1 {{ form.name }}
-          img(:src="form.image")
-          h3 教練: {{ form.coachName }}
-          h3 課程地點: {{ form.place }}
-          h3 課程時段: {{ form.time }}
-          h3 課程價錢: $ {{ form.price }} / 堂
-          n-button(
-            color="#D74B4B"
-            @click="registration()"
-          ) 立即報名
-      n-gi
-        div
-          h2 課程介紹
-          h4 {{ form.description }}
-
+    #modalSection01.flex.D-column.align-items-flex-start
+      h1 {{ form.name }}
+      img(:src="form.image")
+      h3 教練: {{ form.coachName }}
+      h3 課程地點: {{ form.place }}
+      h3 課程時段: {{ form.time }}
+      h3 課程價錢: $ {{ form.price }} / 堂
+      h2 課程介紹
+      h4 {{ form.description }}
+      #btnSection.flex
+        n-button(
+          color="#D74B4B"
+          @click="registration()"
+        ) 立即報名
 </template>
 
 <script setup>
 import Swal from 'sweetalert2';
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 import { api, apiAuth } from '../../plugins/axios';
 
 const courses = reactive([])
+
+const currentPage = ref(1)
+const pageSize = 8
+const sliceCourses = computed(() => {
+  return courses.slice((currentPage.value * pageSize) - pageSize, (currentPage.value * pageSize))
+})
 
 const form = reactive({
   _id: '',
@@ -152,12 +155,11 @@ init()
 
 #container
   width: 60%
-  padding: 80px 0 0 0
+  padding: 30px 0 0 0
   margin: auto
 
 #section01
   width: 100%
-  height: calc( 100vh - 148px )
   margin-bottom: 50px
   h1
     font-size: 1.8rem
@@ -178,6 +180,8 @@ init()
     object-fit: cover
     border-radius: 5px
     margin-bottom: 10px
+  h2
+    margin-top: 10px
   button
     margin-top: 10px
     font-size: 1rem
@@ -187,4 +191,22 @@ init()
   h1
     position: absolute
     top: 18.4px
+
+#btnSection
+  width: 100%
+  margin: 15px 0
+
+.n-grid
+  // height: 830px
+  div
+    height: 100%
+
+.n-pagination
+  display: flex
+  justify-content: center
+  margin: 20px
+
+@media (max-width: 1200px)
+  #container
+    width: 85%
 </style>

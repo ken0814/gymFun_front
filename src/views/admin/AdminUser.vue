@@ -74,7 +74,7 @@ const init = async () => {
     Swal.fire({
       icon: 'error',
       title: '失敗',
-      text: error.isAxiosError ? error.response.data.message : error.message
+      text: error.isAxiosError ? error.response.data.message : error.metablessage
     })
   }
 }
@@ -90,8 +90,11 @@ init()
   text-align: center
   thead
     th
-      font-size: .9rem
+      font-size: 1rem
       font-weight: bold
     th:nth-child(1)
       width: 130px
+  tbody
+    td
+      font-size: 15px
 </style>

@@ -118,7 +118,7 @@
         p 是否上架
       n-button(
         attr-type="submit"
-        color="#D74B4B"
+        color="#475F77"
         :loading='form.submitting'
       ) 送出
 </template>
@@ -249,6 +249,9 @@ init()
   border-radius: 5px
   overflow: scroll
   overflow-x: hidden
+  :deep .n-checkbox__label
+    font-size: 1rem
+    font-weight: bold
 
 #section03
   padding: 0 5px

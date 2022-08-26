@@ -3,14 +3,14 @@
   .carouselContainer
     n-carousel(autoplay draggable show-dots)
       a(href="https://www.ptfit.pro/pt-article/personal-trainer/6-personal-trainer-advantage" target="_blank")
-        img(class="carousel-img" src="../../assets/images/ph2.png")
+        img(class="carousel-img" src="../../assets/images/ph1.jpg")
       a(href="https://fitnesstwenty.com/stagnation-period/" target="_blank")
-        img(class="carousel-img" src="../../assets/images/ph3.png")
-      img(class="carousel-img" src="../../assets/images/ph1.jpg")
+        img(class="carousel-img" src="../../assets/images/ph2.jpg")
+      img(class="carousel-img" src="../../assets/images/ph3.jpg")
 #section02.flex
   n-grid(
     breakpoints="s: 768"
-    cols="1 s:3"
+    cols="1 md:3"
     responsive="screen"
   )
     n-gi.flex.D-column
@@ -36,7 +36,7 @@
         button 立即探索
 #section03.flex
   .container
-    n-grid(cols='1 s:2 m:3' responsive="screen")
+    n-grid(cols='1 md:2 lg:3' responsive="screen")
       n-gi(v-for='(advertise, idx) in advertises' :key="advertise._id")
         .advertise_card
           n-card(content-style="padding:0px 10px")
@@ -61,6 +61,7 @@
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
   p Copyright &copy; 2022 kenli
+  p 網站為學習用途，無商業使用。圖片均取自網路
 </template>
 
 <script setup>
@@ -90,20 +91,17 @@ init()
 <style lang="sass" scoped>
 #section01
   width: 100%
-  height: 680px
-  margin: 10px 0px
+  margin: 24px 0px
   .carouselContainer
     width: 60%
     img
       width: 100%
       height: 100%
       object-fit: contain
-    .n-carousel
-      height: 680px
 #section02
   width:100%
   height: 200px
-  margin-bottom: 100px
+  margin-bottom: 50px
   background: #D74B4B
   padding: 0 18vw
   font-size: 1.7rem
@@ -126,13 +124,13 @@ init()
 
 #section03
   width: 100%
-  margin-bottom: 100px
+  margin-bottom: 50px
   .container
     width: 60%
     height: 100%
   .n-card
     border: none
-    border-radius: 5px
+    // border-radius: 5px
     height: 100%
     img
       width: 100%
@@ -185,7 +183,7 @@ button:hover
 
 @media (max-width: 768px)
   #section01
-    height: 450px
+    // height: 450px
 
   #section02
     height: 600px
@@ -194,4 +192,8 @@ button:hover
       width: 120px
       height: 50px
       font-size: 1.5rem
+      margin: 9px 0
+
+  .n-grid
+    gap: 20px !important
 </style>
