@@ -12,36 +12,61 @@
         a(@click="openDialog(coach._id, idx)")
           n-card
             template(#cover)
-              img(:src="coach.document.image")
-            h2 {{ coach.document.name }}
+              img(:src="coach.profile[0].document.image")
+            h2 {{ coach.profile[0].document.name }}
       n-gi(v-else)
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(coachs.length / pageSize)")
 n-modal(
-  v-model:show="showModal"
+  v-model:show="doc.showModal"
   preset="card"
   style="width:500px"
 )
   #modal.flex.D-column
     #modalSection01.flex.D-column.align-items-flex-start
       h1 教練資訊
-      img(:src="form.image")
-      h3 名稱: {{ form.name }}
-      h3 連絡電話: {{ form.phone }}
-      h3 出沒地點: {{ form.place }}
-      h3 教學時段: {{ form.time }}
-      h3 擅長項目: {{ form.contentOfCourses }}
+      img(:src="doc.image")
+      h3 名稱: {{ doc.name }}
+      h3 連絡電話: {{ doc.phone }}
+      h3 出沒地點: {{ doc.place }}
+      h3 教學時段: {{ doc.time }}
+      h3 擅長項目: {{ doc.contentOfCourses }}
       div
-        h3 自我介紹: {{ form.introduction }}
-      n-button(color="#475F77") 傳送訊息
+        h3 自我介紹: {{ doc.introduction }}
+      n-button(
+        color="#475F77"
+        @click="openMassageModal()"
+      ) 傳送訊息
 
+n-modal(
+  v-model:show="form.showModal"
+  preset="card"
+)#n-modal
+  h3 傳送訊息
+  n-form(
+    ref="formRef"
+    :model="form"
+    @submit.prevent="submitForm"
+  )
+    n-form-item(
+      path="message"
+      label="訊息內容"
+    )
+      n-input(
+        v-model:value="form.content"
+        type="textarea"
+        placeholder="輸入訊息內容"
+      )
+    n-button(
+      color="#475F77"
+      attr-type="submit"
+      :loading="form.submitting"
+    ) 送出
 </template>
 
 <script setup>
 import Swal from 'sweetalert2';
 import { reactive } from 'vue';
-import { api } from '../../plugins/axios';
-
-const showModal = ref(false)
+import { api, apiAuth } from '../../plugins/axios'
 
 const coachs = reactive([])
 
@@ -52,6 +77,12 @@ const sliceCoachs = computed(() => {
 })
 
 const form = reactive({
+  content: '',
+  showModal: false,
+  submitting: false
+})
+
+const doc = reactive({
   _id: '',
   name: '',
   time: '',
@@ -65,31 +96,64 @@ const form = reactive({
 })
 
 const openDialog = (_id, idx) => {
-  showModal.value = true
-  form._id = _id
+  doc._id = _id
   if (idx > -1) {
-    const coach = coachs[idx].document
-    form.name = coach.name
-    form.contentOfCourses = coach.contentOfCourses.toString()
-    form.phone = coach.phone
-    form.place = coach.place.toString()
-    form.sell = coach.sell
-    form.introduction = coach.introduction
-    form.image = coach.image
-    form.name = coach.name
-    form.time = coach.time
+    const coach = coachs[idx].profile[0].document
+    doc.name = coach.name
+    doc.contentOfCourses = coach.contentOfCourses.toString()
+    doc.phone = coach.phone
+    doc.place = coach.place.toString()
+    doc.sell = coach.sell
+    doc.introduction = coach.introduction
+    doc.image = coach.image
+    doc.name = coach.name
+    doc.time = coach.time
   }
-  form.idx = idx
+  doc.idx = idx
+  doc.showModal = true
+}
+
+const openMassageModal = () => {
   form.showModal = true
-  form.submitting = false
+}
+
+const submitForm = async () => {
+  try {
+    form.submitting = true
+    const data = {
+      content: form.content
+    }
+    await apiAuth.post('/messages/' + doc._id, data)
+    Swal.fire({
+      icon: 'success',
+      title: '成功',
+      text: '送出成功'
+    })
+    form.submitting = false
+    form.showModal = false
+    doc.showModal = false
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: (error.response.data.message === 'No auth token') ? '請先登入後才能使用訊息功能' : error.isAxiosError ? error.response.data.message : error.message
+    })
+    console.log(error.response.data.message)
+    form.submitting = false
+    form.showModal = false
+    doc.showModal = false
+  }
+
 }
 
 const init = async () => {
   try {
     const { data } = await api.get('/users/coach')
+    // console.log(data.final)
     for (const idx in data.final) {
-      if (data.final[idx].profile[0].document.sell === true) coachs.push(...data.final[idx].profile)
+      if (data.final[idx].profile[0].document.sell === true) coachs.push(data.final[idx])
     }
+    console.log(coachs)
   } catch (error) {
     Swal.fire({
       icon: 'error',
