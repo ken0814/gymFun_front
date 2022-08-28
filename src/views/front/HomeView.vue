@@ -15,14 +15,14 @@
   )
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="180" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="usersLength" /> +
       p
         |運動愛好者
       RouterLink(to="/register")
         button 立即加入
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="20" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="coursesLength" /> +
       p
         |運動課程
       RouterLink(to="/findCourse")
@@ -72,6 +72,9 @@ import { ref, reactive } from 'vue';
 
 const advertises = reactive([])
 
+const coursesLength = ref('0')
+const usersLength = ref('0')
+
 const init = async () => {
   try {
     const { data } = await apiAuth.get('/bill/all')
@@ -85,6 +88,21 @@ const init = async () => {
   }
 }
 init()
+
+const init2 = async () => {
+  try {
+    const { data } = await apiAuth.get('/courses/')
+    console.log(data.result.length)
+    coursesLength.value = data.result.length
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+  }
+}
+init2()
 
 </script>
 
@@ -125,6 +143,8 @@ init()
 #section03
   width: 100%
   margin-bottom: 50px
+  a
+    color: #333 !important
   .container
     width: 60%
     height: 100%
