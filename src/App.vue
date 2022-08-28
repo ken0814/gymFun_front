@@ -16,6 +16,9 @@ const themeOverrides = {
     itemBorderActive: 'none',
     itemColorDisabled: '#475F77',
     itemColorActiveHover: '#475F77'
+  },
+  Input: {
+    textColorDisabled: 'rgba(0, 0, 0, 1)'
   }
 }
 

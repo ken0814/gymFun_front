@@ -126,8 +126,6 @@ nav
     font-size: 1rem
 
 @media (max-width: 1200px)
-  #logo
-  #nav_button
   .nav_container
     width: 100% !important
     padding: 0 6% !important

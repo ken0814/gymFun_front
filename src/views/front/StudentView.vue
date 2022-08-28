@@ -9,38 +9,70 @@
         v-for='(student, idx) in sliceStudents'
         :key='student._id'
       )
-        a(@click="openDialog(student._id, idx)")
+        a(@click="openDialog(student.document.user, idx)")
           n-card
             template(#cover)
               img(:src="student.document.image")
-            h2 {{ student.document.name }} 
+            h2 {{ student.document.name }}
       n-gi(v-else)
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(students.length / pageSize)")
 n-modal(
-  v-model:show="showModal"
+  v-model:show="doc.showModal"
   preset="card"
   style="width:500px"
 )
   #modal.flex.D-column
     #modalSection01.flex.D-column.align-items-flex-start
       h1 學員資訊
-      img(:src="form.image")
-      h3 名稱: {{ form.name }}
-      h3 連絡電話: {{ form.phone }}
-      h3 出沒地點: {{ form.place }}
-      h3 教學時段: {{ form.time }}
-      h3 擅長項目: {{ form.findCourse }}
-      h3 自我介紹: {{ form.introduction }}
-      n-button(color="#475F77") 傳送訊息
+      img(:src="doc.image")
+      h3 名稱: {{ doc.name }}
+      h3 連絡電話: {{ doc.phone }}
+      h3 出沒地點: {{ doc.place }}
+      h3 教學時段: {{ doc.time }}
+      h3 擅長項目: {{ doc.findCourse }}
+      h3 自我介紹: {{ doc.introduction }}
+      n-button(
+        color="#475F77"
+        @click="openMassageModal()"
+        style="margin:10px auto"
+      ) 傳送訊息
 
+n-modal(
+  v-model:show="form.showModal"
+  preset="card"
+)#n-modal
+  h1 傳送訊息
+  n-form(
+    ref="formRef"
+    :model="form"
+    @submit.prevent="submitForm"
+  )
+    n-form-item(
+      path="message"
+      label="訊息內容"
+    )
+      n-input(
+        v-model:value="form.content"
+        type="textarea"
+        placeholder="輸入訊息內容"
+      )
+    n-button(
+      color="#475F77"
+      attr-type="submit"
+      :loading="form.submitting"
+    ) 送出
 </template>
 
 <script setup>
 import Swal from 'sweetalert2';
 import { reactive } from 'vue';
-import { api } from '../../plugins/axios';
+import { api, apiAuth } from '../../plugins/axios';
 
-const showModal = ref(false)
+const form = reactive({
+  content: '',
+  showModal: false,
+  submitting: false
+})
 
 const students = reactive([])
 
@@ -50,7 +82,7 @@ const sliceStudents = computed(() => {
   return students.slice((currentPage.value * pageSize) - pageSize, (currentPage.value * pageSize))
 })
 
-const form = reactive({
+const doc = reactive({
   _id: '',
   name: '',
   time: '',
@@ -64,23 +96,56 @@ const form = reactive({
 })
 
 const openDialog = (_id, idx) => {
-  showModal.value = true
-  form._id = _id
+  doc._id = _id
   if (idx > -1) {
     const student = students[idx].document
-    form.name = student.name
-    form.findCourse = student.findCourse.toString()
-    form.phone = student.phone
-    form.place = student.place.toString()
-    form.sell = student.sell
-    form.introduction = student.introduction
-    form.image = student.image
-    form.name = student.name
-    form.time = student.time
+    doc.name = student.name
+    doc.findCourse = student.findCourse.toString()
+    doc.phone = student.phone
+    doc.place = student.place.toString()
+    doc.sell = student.sell
+    doc.introduction = student.introduction
+    doc.image = student.image
+    doc.name = student.name
+    doc.time = student.time
   }
-  form.idx = idx
+  doc.idx = idx
+  doc.showModal = true
+  doc.submitting = false
+}
+
+const openMassageModal = () => {
   form.showModal = true
-  form.submitting = false
+}
+
+const submitForm = async () => {
+  try {
+    form.submitting = true
+    const data = {
+      content: form.content
+    }
+    console.log(doc._id)
+    await apiAuth.post('/messages/' + doc._id, data)
+    Swal.fire({
+      icon: 'success',
+      title: '成功',
+      text: '送出成功'
+    })
+    form.submitting = false
+    form.showModal = false
+    doc.showModal = false
+  } catch (error) {
+    console.log(error)
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: (error.response.data.message === 'No auth token') ? '請先登入後才能使用訊息功能' : error.isAxiosError ? error.response.data.message : error.message
+    })
+    console.log(error.response.data.message)
+    form.submitting = false
+    form.showModal = false
+    doc.showModal = false
+  }
 }
 
 const init = async () => {

@@ -35,13 +35,14 @@ n-modal(
       n-button(
         color="#475F77"
         @click="openMassageModal()"
+        style="margin:10px auto"
       ) 傳送訊息
 
 n-modal(
   v-model:show="form.showModal"
   preset="card"
 )#n-modal
-  h3 傳送訊息
+  h1 傳送訊息
   n-form(
     ref="formRef"
     :model="form"
@@ -143,7 +144,6 @@ const submitForm = async () => {
     form.showModal = false
     doc.showModal = false
   }
-
 }
 
 const init = async () => {
@@ -242,6 +242,16 @@ init()
   display: flex
   justify-content: center
   margin: 20px
+
+#n-modal
+  h1
+    position: absolute
+    top: 12px
+  form
+    margin-top: 5px
+  button
+    margin-top: -5px
+    float: right
 
 @media (max-width: 1200px)
   #container
