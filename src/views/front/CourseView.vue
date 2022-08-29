@@ -1,5 +1,5 @@
 <template lang="pug">
-#container.flex
+#container.flex.D-column.justify-content-space-between
   #section01
     h1 課程列表
     hr
@@ -21,10 +21,21 @@
       n-gi(v-else)
         n-card(style="text-align: center;") 沒有課程
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(courses.length / pageSize)")
+  #footer.flex.D-column
+    #footerIcon_section.flex
+      a(href="https://fb.com")
+        n-icon(size="25" color="#fff" :component="FacebookSquare")
+      a(href="https://www.instagram.com/")
+        n-icon(size="25" color="#fff" :component="Instagram")
+      a(href="https://twitter.com")
+        n-icon(size="25" color="#fff" :component="TwitterSquare")
+      a(href="https://line.me/zh-hant/")
+        n-icon(size="25" color="#fff" :component="Line")
+    p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
 n-modal(
   v-model:show="form.showModal"
   preset="card"
-  style="width:400px;"
+  style="width:500px;"
 )
   #modal.flex.D-column
     #modalSection01.flex.D-column.align-items-flex-start
@@ -44,9 +55,10 @@ n-modal(
 </template>
 
 <script setup>
-import Swal from 'sweetalert2';
-import { reactive, computed } from 'vue';
-import { api, apiAuth } from '../../plugins/axios';
+import Swal from 'sweetalert2'
+import { reactive, computed } from 'vue'
+import { api, apiAuth } from '../../plugins/axios'
+import { FacebookSquare, Instagram, TwitterSquare, Line } from '@vicons/fa'
 
 const courses = reactive([])
 
@@ -156,11 +168,13 @@ init()
 
 #container
   width: 60%
+  height: calc( 100vh - 74px )
   padding: 30px 0 0 0
   margin: auto
 
 #section01
   width: 100%
+  // height: 900px
   margin-bottom: 50px
   h1
     font-size: 1.8rem
@@ -172,6 +186,8 @@ init()
     border: none
     margin-top: -6.5px
     margin-bottom: 20px
+  .grid
+    height: 765px
 
 #modal
   line-height: 1.5rem
@@ -201,6 +217,21 @@ init()
 #btnSection
   width: 100%
   margin: 15px 0
+
+#footer
+  width: 100vw
+  height: 70px
+  background: #354B5E
+  justify-content: space-evenly
+  #footerIcon_section
+    width: 192px
+    margin: 10px 0
+    justify-content: space-between
+    a
+      height: 25px
+  p
+    color: #fff
+    font-size: .5rem
 
 .n-grid
   // height: 830px

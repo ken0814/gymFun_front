@@ -85,8 +85,8 @@ nav
   background: #354B5E
   color: #fff
   box-shadow: 0 1px 4px #333
-  position: fixed
-  top: 0
+  // position: fixed
+  // top: 0
   z-index: 1000
   .nav_container
     width: 60%
@@ -103,8 +103,8 @@ nav
     :deep .n-button
       font-size: 1rem
 #router
-  position: relative
-  top: 74px
+  // position: relative
+  // top: 74px
   
 #hamburger
   display: none

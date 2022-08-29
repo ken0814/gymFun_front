@@ -100,8 +100,7 @@
       n-icon(size="25" color="#fff" :component="TwitterSquare")
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
-  p Copyright &copy; 2022 kenli
-  p 網站為學習用途，無商業使用。圖片均取自網路
+  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
 </template>
 
 <script setup>
@@ -238,19 +237,19 @@ const submitForm = () => {
 
 // footer
 #footer
-  width: 100%
+  width: 100vw
   height: 70px
   background: #354B5E
   justify-content: space-evenly
+  #footerIcon_section
+    width: 192px
+    margin: 10px 0
+    justify-content: space-between
+    a
+      height: 25px
   p
     color: #fff
     font-size: .5rem
-
-#footerIcon_section
-  width: 192px
-  justify-content: space-between
-  a
-    height: 25px
 
 @media (max-width: 1400px)
   .container

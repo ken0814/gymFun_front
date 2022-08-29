@@ -1,5 +1,5 @@
 <template lang="pug">
-#container.flex
+#container.flex.D-column.justify-content-space-between
   #section01
     h1 學員列表
     hr
@@ -17,6 +17,17 @@
       n-gi(v-else)
         n-card 沒有學員
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(students.length / pageSize)")
+  #footer.flex.D-column
+    #footerIcon_section.flex
+      a(href="https://fb.com")
+        n-icon(size="25" color="#fff" :component="FacebookSquare")
+      a(href="https://www.instagram.com/")
+        n-icon(size="25" color="#fff" :component="Instagram")
+      a(href="https://twitter.com")
+        n-icon(size="25" color="#fff" :component="TwitterSquare")
+      a(href="https://line.me/zh-hant/")
+        n-icon(size="25" color="#fff" :component="Line")
+    p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
 n-modal(
   v-model:show="doc.showModal"
   preset="card"
@@ -31,7 +42,8 @@ n-modal(
       h3 出沒地點: {{ doc.place }}
       h3 教學時段: {{ doc.time }}
       h3 擅長項目: {{ doc.findCourse }}
-      h3 自我介紹: {{ doc.introduction }}
+      h3 自我介紹: 
+      h4 {{ doc.introduction }}
       n-button(
         color="#475F77"
         @click="openMassageModal()"
@@ -65,9 +77,10 @@ n-modal(
 </template>
 
 <script setup>
-import Swal from 'sweetalert2';
-import { reactive } from 'vue';
-import { api, apiAuth } from '../../plugins/axios';
+import Swal from 'sweetalert2'
+import { reactive } from 'vue'
+import { api, apiAuth } from '../../plugins/axios'
+import { FacebookSquare, Instagram, TwitterSquare, Line } from '@vicons/fa'
 
 const form = reactive({
   content: '',
@@ -172,19 +185,20 @@ init()
 .n-grid
   gap:30px !important
 
-.n-card
-  background: rgba(255,255,255, 0.4)
-  border: none
-  border-radius: 15px
-  box-shadow: 0 0 10px #475F77
-
-  text-align: center
-  img
-    width: 150px
-    height: 150px
-    object-fit: cover
-    border-radius: 50%
-    margin: 20px auto
+#section01
+  .n-card
+    background: rgba(255,255,255, 0.4)
+    border: none
+    border-radius: 15px
+    box-shadow: 0 0 10px #475F77
+  
+    text-align: center
+    img
+      width: 150px
+      height: 150px
+      object-fit: cover
+      border-radius: 50%
+      margin: 20px auto
 
 .n-card:hover
   transform: scale(1.02)
@@ -193,12 +207,12 @@ init()
 
 #container
   width: 60%
+  height: calc( 100vh - 74px )
   padding: 30px 0 0 0
   margin: auto
 
 #section01
   width: 100%
-  margin-bottom: 50px
   h1
     font-size: 1.8rem
     color: #354B5E
@@ -217,22 +231,42 @@ init()
     height: 200px
     object-fit: cover
     border-radius: 5px
-    margin-bottom: 10px
+    margin: 20px auto
   h2
     margin-top: 10px
   button
     margin-top: 10px
     font-size: 1rem
+  h4
+    font-size: 14.5px
+    text-align: justify
     
 
 #modalSection01
   h1
     position: absolute
-    top: 18.4px
+    top: 29px
+    left: 50%
+    transform: translateX(-50%)
 
 #btnSection
   width: 100%
   margin: 15px 0
+
+#footer
+  width: 100vw
+  height: 70px
+  background: #354B5E
+  justify-content: space-evenly
+  #footerIcon_section
+    width: 192px
+    margin: 10px 0
+    justify-content: space-between
+    a
+      height: 25px
+  p
+    color: #fff
+    font-size: .5rem
 
 .n-grid
   // height: 830px

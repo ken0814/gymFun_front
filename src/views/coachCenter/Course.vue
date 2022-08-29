@@ -99,6 +99,7 @@ n-modal(
       n-button(
         color="#DCDDD8"
         :disable="form.submitting"
+        style="color:#333"
         @click="close"
       ) 取消
 #section02

@@ -6,7 +6,8 @@
         img(class="carousel-img" src="../../assets/images/ph1.jpg")
       a(href="https://fitnesstwenty.com/stagnation-period/" target="_blank")
         img(class="carousel-img" src="../../assets/images/ph2.jpg")
-      img(class="carousel-img" src="../../assets/images/ph3.jpg")
+      a(href="https://www.teamjoined.com.tw/pages/training-volume" target="_blank")
+        img(class="carousel-img" src="../../assets/images/ph3.jpg")
 #section02.flex
   n-grid(
     breakpoints="s: 768"
@@ -60,7 +61,7 @@
       n-icon(size="25" color="#fff" :component="TwitterSquare")
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
-  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片均取自網路
+  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
 </template>
 
 <script setup>
@@ -217,12 +218,12 @@ button:hover
 
 #footer
   width: 100%
-  height: 100px
+  height: 70px
   background: #354B5E
   justify-content: space-evenly
   #footerIcon_section
     width: 192px
-    margin-top: 10px
+    margin: 10px 0
     justify-content: space-between
     a
       height: 25px
