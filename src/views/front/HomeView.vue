@@ -15,7 +15,7 @@
   )
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="usersLength" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="userLength" /> +
       p
         |運動愛好者
       RouterLink(to="/register")
@@ -29,7 +29,7 @@
         button 立即探索
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="100" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="coachLength" /> +
       p
         |專業教練
       RouterLink(to="/findCoach")
@@ -60,24 +60,25 @@
       n-icon(size="25" color="#fff" :component="TwitterSquare")
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
-  p Copyright &copy; 2022 kenli
-  p 網站為學習用途，無商業使用。圖片均取自網路
+  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片均取自網路
 </template>
 
 <script setup>
 import { FacebookSquare, Instagram, TwitterSquare, Line } from '@vicons/fa'
 import Swal from 'sweetalert2'
-import { apiAuth } from '@/plugins/axios'
+import { api, apiAuth } from '@/plugins/axios'
 import { ref, reactive } from 'vue';
 
 const advertises = reactive([])
 
-const coursesLength = ref('0')
-const usersLength = ref('0')
+const usersLength = ref(0)
+const coursesLength = ref(0)
+const coachLength = ref(0)
+const userLength = usersLength.value + coachLength.value
 
 const init = async () => {
   try {
-    const { data } = await apiAuth.get('/bill/all')
+    const { data } = await api.get('/bill/all')
     advertises.push(...data.result)
   } catch (error) {
     Swal.fire({
@@ -89,10 +90,9 @@ const init = async () => {
 }
 init()
 
-const init2 = async () => {
+const getCourseLength = async () => {
   try {
-    const { data } = await apiAuth.get('/courses/')
-    console.log(data.result.length)
+    const { data } = await api.get('/courses/')
     coursesLength.value = data.result.length
   } catch (error) {
     Swal.fire({
@@ -102,7 +102,51 @@ const init2 = async () => {
     })
   }
 }
-init2()
+getCourseLength()
+
+const getUserLength = async () => {
+  try {
+    const { data } = await api.get('/users/all')
+    usersLength.value = data.result.length
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+  }
+}
+getUserLength()
+
+const getCoachLength = async () => {
+  try {
+    const { data } = await api.get('/users/coach')
+    coachLength.value = data.final.length
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+  }
+}
+
+getCoachLength()
+
+const getStudentLength = async () => {
+  try {
+    const { data } = await api.get('users/student')
+    usersLength.value = data.final.length
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+  }
+}
+
+getStudentLength()
 
 </script>
 
@@ -175,11 +219,12 @@ button:hover
 
 #footer
   width: 100%
-  height: 70px
+  height: 100px
   background: #354B5E
   justify-content: space-evenly
   #footerIcon_section
     width: 192px
+    margin-top: 10px
     justify-content: space-between
     a
       height: 25px

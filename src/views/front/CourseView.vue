@@ -19,7 +19,7 @@
             h3 上課時段: {{ course.time }}
             h3 價錢: $ {{ course.price }} / 堂
       n-gi(v-else)
-        n-card 沒有課程
+        n-card(style="text-align: center;") 沒有課程
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(courses.length / pageSize)")
 n-modal(
   v-model:show="form.showModal"
@@ -176,10 +176,11 @@ init()
   line-height: 1.5rem
   img
     width: 300px
-    height: 200px
+    height: 300px
     object-fit: cover
     border-radius: 5px
-    margin-bottom: 10px
+    // margin-bottom: 10px
+    margin: 10px auto
   h2
     margin-top: 10px
   button
@@ -190,7 +191,9 @@ init()
 #modalSection01
   h1
     position: absolute
-    top: 18.4px
+    top: 25px
+    left: 50%
+    transform: translateX(-50%)
 
 #btnSection
   width: 100%

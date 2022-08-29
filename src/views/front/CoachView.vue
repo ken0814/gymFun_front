@@ -15,6 +15,7 @@
               img(:src="coach.profile[0].document.image")
             h2 {{ coach.profile[0].document.name }}
       n-gi(v-else)
+        n-card 沒有教練
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(coachs.length / pageSize)")
 n-modal(
   v-model:show="doc.showModal"
@@ -139,7 +140,6 @@ const submitForm = async () => {
       title: '失敗',
       text: (error.response.data.message === 'No auth token') ? '請先登入後才能使用訊息功能' : error.isAxiosError ? error.response.data.message : error.message
     })
-    console.log(error.response.data.message)
     form.submitting = false
     form.showModal = false
     doc.showModal = false
@@ -149,11 +149,9 @@ const submitForm = async () => {
 const init = async () => {
   try {
     const { data } = await api.get('/users/coach')
-    // console.log(data.final)
     for (const idx in data.final) {
       if (data.final[idx].profile[0].document.sell === true) coachs.push(data.final[idx])
     }
-    console.log(coachs)
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -171,19 +169,19 @@ init()
 .n-grid
   gap:30px !important
 
-.n-card
-  background: rgba(255,255,255, 0.4)
-  border: none
-  border-radius: 15px
-  box-shadow: 0 0 10px #475F77
-
-  text-align: center
-  img
-    width: 150px
-    height: 150px
-    object-fit: cover
-    border-radius: 50%
-    margin: 20px auto
+#section01
+  .n-card
+    background: rgba(255,255,255, 0.4)
+    border: none
+    border-radius: 15px
+    box-shadow: 0 0 10px #475F77
+    text-align: center
+    img
+      width: 150px
+      height: 150px
+      object-fit: cover
+      border-radius: 50%
+      margin: 20px auto
 
 .n-card:hover
   transform: scale(1.02)
@@ -216,7 +214,8 @@ init()
     height: 200px
     object-fit: cover
     border-radius: 5px
-    margin-bottom: 10px
+    // margin-bottom: 10px
+    margin: 10px auto
   h2
     margin-top: 10px
   button
@@ -227,7 +226,9 @@ init()
 #modalSection01
   h1
     position: absolute
-    top: 18.4px
+    top: 29px
+    left: 50%
+    transform: translateX(-50%)
 
 #btnSection
   width: 100%

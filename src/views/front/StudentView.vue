@@ -15,6 +15,7 @@
               img(:src="student.document.image")
             h2 {{ student.document.name }}
       n-gi(v-else)
+        n-card 沒有學員
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(students.length / pageSize)")
 n-modal(
   v-model:show="doc.showModal"

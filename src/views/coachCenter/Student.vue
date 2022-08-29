@@ -44,7 +44,7 @@ n-modal(
             n-icon(size="25" color="#fff" :component="EditCalendarOutlined"
           )
       tr(v-else) 
-        td(colspan='4' style="text-align: center") 沒有課程
+        td(colspan='4' style="text-align: center") 沒有學員
 n-pagination(v-model:page="currentPage" :page-count="Math.ceil(doc.length / pageSize)")
 
 </template>
