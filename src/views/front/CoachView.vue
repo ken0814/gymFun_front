@@ -13,7 +13,7 @@
           n-card
             template(#cover)
               img(:src="coach.profile[0].document.image")
-            h2 {{ coach.profile[0].document.name }}
+            h2 {{   coach.profile[0].document.name   }}
       n-gi(v-else)
         n-card 沒有教練
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(coachs.length / pageSize)")
@@ -37,14 +37,14 @@ n-modal(
     #modalSection01.flex.D-column.align-items-flex-start
       h1 教練資訊
       img(:src="doc.image")
-      h3 名稱: {{ doc.name }}
-      h3 連絡電話: {{ doc.phone }}
-      h3 出沒地點: {{ doc.place }}
-      h3 教學時段: {{ doc.time }}
-      h3 擅長項目: {{ doc.contentOfCourses }}
+      h3 名稱: {{   doc.name   }}
+      h3 連絡電話: {{   doc.phone   }}
+      h3 出沒地點: {{   doc.place   }}
+      h3 教學時段: {{   doc.time   }}
+      h3 擅長項目: {{   doc.contentOfCourses   }}
       div
         h3 自我介紹: 
-        h4 {{ doc.introduction }}
+        h4 {{   doc.introduction   }}
       n-button(
         color="#475F77"
         @click="openMassageModal()"
@@ -147,6 +147,7 @@ const submitForm = async () => {
     form.submitting = false
     form.showModal = false
     doc.showModal = false
+    form.content = ''
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -156,6 +157,7 @@ const submitForm = async () => {
     form.submitting = false
     form.showModal = false
     doc.showModal = false
+    form.content = ''
   }
 }
 

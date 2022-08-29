@@ -35,7 +35,13 @@ n-modal(
       n-button(
         color="#475F77"
         attr-type="submit"
+        :loading="form.submitting"
       ) 送出
+      n-button(
+        color="#D74B4B"
+        @click="delMessage()"
+        :loading="form.submitting"
+      ) 刪除信件
 #section02
   n-table(:bordered="false" :single-line="false")#table
     thead
@@ -46,9 +52,9 @@ n-modal(
         th 查看 / 回復
     tbody
       tr(v-if="messages.length > 0" v-for="(message, idx) in messages" :key="message._id")
-        td {{ message.senderProfile.name }}
-        td {{ message.message.content }}
-        td {{ message.message.date }} {{ message.sender._id }}
+        td {{              message.senderProfile.name              }}
+        td {{              message.message.content              }}
+        td {{              new Date(message.message.date).toLocaleDateString()              }}
         td 
           n-button(
             color="#475F77"
@@ -69,11 +75,13 @@ import { apiAuth } from '../../plugins/axios'
 import { EditCalendarOutlined } from '@vicons/material'
 
 const form = reactive({
+  message_id: '',
   sender_id: '',
   senderMessage: '',
   messageContent: '',
   showModal: false,
-  submitting: false
+  submitting: false,
+  idx: -1
 })
 
 const messages = reactive([])
@@ -85,6 +93,8 @@ const sliceMessages = computed(() => {
 })
 
 const openModal = (_id, idx) => {
+  form.idx = idx
+  form.message_id = messages[idx].message._id
   form.sender_id = _id
   form.showModal = true
   form.senderMessage = messages[idx].message.content
@@ -102,6 +112,30 @@ const submitForm = async () => {
       title: '成功',
       text: '送出成功'
     })
+    form.messageContent = ''
+    form.submitting = false
+    form.showModal = false
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+    form.submitting = false
+    form.showModal = false
+    form.messageContent = ''
+  }
+}
+
+const delMessage = async (idx) => {
+  try {
+    await apiAuth.delete('/messages/' + form.message_id)
+    Swal.fire({
+      icon: 'success',
+      title: '成功',
+      text: '刪除成功'
+    })
+    messages.splice(form.idx, 1)
     form.submitting = false
     form.showModal = false
   } catch (error) {
@@ -153,9 +187,6 @@ init()
 i
   font-size: 18px !important
 
-button
-  border-radius: 20px
-
 #modal
   h1
     position: absolute
@@ -165,9 +196,13 @@ button
 
 #btnSection
   padding: 0 5px
+  button:nth-child(2)
+    margin-left: 3px
 
 #section02
   height: 575px
+  button
+    border-radius: 20px
 
 .n-pagination
   display: flex
