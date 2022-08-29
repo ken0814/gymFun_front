@@ -16,7 +16,7 @@
   )
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="20" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="usersLength" /> +
       p
         |運動愛好者
       RouterLink(to="/register")
@@ -74,7 +74,7 @@ const advertises = reactive([])
 
 const coursesLength = ref(0)
 const coachLength = ref(0)
-const studentLength = ref(0)
+const usersLength = ref(0)
 
 const init = async () => {
   try {
@@ -104,19 +104,25 @@ const getCourseLength = async () => {
 }
 getCourseLength()
 
-// const getUserLength = async () => {
-//   try {
-//     const { data } = await api.get('/users/all')
-//     usersLength.value = data.result.length
-//   } catch (error) {
-//     Swal.fire({
-//       icon: 'error',
-//       title: '失敗',
-//       text: error.isAxiosError ? error.response.data.message : error.message
-//     })
-//   }
-// }
-// getUserLength()
+const getUserLength = async () => {
+  try {
+    const { data } = await api.get('/users/all')
+    const users = []
+    for (const idx in data.result) {
+      if (data.result[idx].role !== 2) {
+        users.push(data.result)
+      }
+    }
+    usersLength.value = users.length
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '失敗',
+      text: error.isAxiosError ? error.response.data.message : error.message
+    })
+  }
+}
+getUserLength()
 
 const getCoachLength = async () => {
   try {
@@ -132,21 +138,6 @@ const getCoachLength = async () => {
 }
 
 getCoachLength()
-const getStudentLength = async () => {
-  try {
-    const { data } = await api.get('users/student')
-    studentLength.value = data.final.length
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: '失敗',
-      text: error.isAxiosError ? error.response.data.message : error.message
-    })
-  }
-}
-
-getStudentLength()
-
 </script>
 
 <style lang="sass" scoped>
