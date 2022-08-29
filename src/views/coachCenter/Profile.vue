@@ -115,7 +115,7 @@
           size="small"
           v-model:value="form.sell"
         ) 
-        p 是否上架
+        p 是否顯示在教練頁面
       n-button(
         attr-type="submit"
         color="#475F77"

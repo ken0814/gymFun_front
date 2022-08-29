@@ -231,7 +231,7 @@ const submitForm = () => {
   height: 480px
   position: absolute
   top: 50%
-  transform: translateY(-57.5%)
+  transform: translateY(-50.5%)
   background: #D74B4B
   z-index: -1
 
@@ -263,7 +263,7 @@ const submitForm = () => {
 
   #section03
     height: 1150px
-    transform: translateY(-53%)
+    transform: translateY(-29.5%)
 
 @media (max-width: 768px)
   .container
@@ -283,6 +283,6 @@ const submitForm = () => {
 
   #section03
     height: 1450px
-    transform: translateY(-52.5%)
+    transform: translateY(-23%)
 
 </style>
