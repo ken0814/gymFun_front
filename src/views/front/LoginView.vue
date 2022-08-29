@@ -142,6 +142,8 @@ const login = () => {
     background: #fff
     border: none
     margin-bottom: 30px
+  h2
+    font-size: 1.5rem
   p
     font-size: .9rem
     margin-top: 25px

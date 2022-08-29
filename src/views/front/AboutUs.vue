@@ -1,10 +1,11 @@
 <template lang="pug">
 .container
   #section01.flex
-    #section02.flex.D-column.justify-content-space-between
-
-
+    #section02.flex.D-column
+      h1 關於我們
     #section03.flex.D-column
+      h1 關於我們
+      p 我畢業於國立高雄應用科技大學，會建立這網頁，是因為自己本身有在健身，又想到新手教練客源不好找，所以就有了這網站
 
 #footer.flex.D-column
   #footerIcon_box.flex
@@ -28,88 +29,6 @@ import { api } from '@/plugins/axios'
 import { FacebookSquare, Instagram, TwitterSquare, Line } from '@vicons/fa'
 
 const router = useRouter()
-const loading = ref(false)
-
-const formRef = ref(null)
-const form = reactive({
-  email: '',
-  account: '',
-  password: '',
-  role: null
-})
-
-const optionsOFRole = [
-  {
-    label: '學員',
-    value: '0'
-  },
-  {
-    label: '教練',
-    value: '1'
-  }
-]
-
-
-const rules = reactive({
-  email: [{
-    required: true,
-    validator (rule, value) {
-      if (!value) {
-        return new Error('信箱必填')
-      } else if (!isEmail(value)) {
-        return new Error('信箱格式錯誤')
-      }
-    },
-    trigger: ["input", "blur"]
-  }],
-  account: [{
-    required: true,
-    validator (rule, value) {
-      if (!value) {
-        return new Error('帳號必填')
-      } else if (value.length < 4 || value.length > 20) {
-        return new Error('帳號長度為 4 到 20 個字')
-      } else if (!/^[a-zA-Z0-9]+$/.test(value)) {
-        return new Error('帳號只能有英文和數字')
-      }
-    },
-    trigger: ["input", "blur"]
-  }],
-  password: [{
-    required: true,
-    validator (rule, value) {
-      if (!value) {
-        return new Error('密碼必填')
-      } else if (value.length < 4 || value.length > 20) {
-        return new Error('密碼長度為 4 到 20 個字')
-      } else if (!/^[a-zA-Z0-9]+$/.test(value)) {
-        return new Error('帳號只能有英文和數字')
-      }
-    },
-    trigger: ["input", "blur"]
-  }]
-}
-)
-const register = async () => {
-  // if (!valid.value) return
-  loading.value = true
-  try {
-    await api.post('/users', form)
-    await Swal.fire({
-      icon: 'success',
-      title: '成功',
-      text: '註冊成功'
-    })
-    router.push('/')
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: '失敗',
-      text: (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
-    })
-  }
-  loading.value = false
-}
 </script>
 
 <style lang="sass" scoped>
@@ -129,40 +48,25 @@ const register = async () => {
   height: 480px
   padding: 80px 0
   color: #fff
-  letter-spacing: 2.5px
   h1
     font-size: 3rem
-  hr
-    width: 160px
-    height: 2px
-    background: #fff
-    border: none
-    margin-bottom: 30px
-  p
-    font-size: .9rem
-    margin-top: 25px
-    margin-bottom: 15px
 #section03
   width: 30%
   height: 600px
   background: #fff
-  text-align: center
+  text-align: justify
   border-radius: 5px
+  padding: 0 100px
   h1
-    font-size: 2rem
+    display: none
+    margin-bottom: 15px
+    font-size: 2.5rem
     color: #475F77
-  hr
-    width: 40px
-    height: 2px
-    background: #475F77
-    border: none
-    margin-bottom: 40px
-  :deep .n-form-item-label
-    color: #475F77
-    font-size: 1rem
-    font-weight: bold
-  :deep .n-form-item-blank
-    justify-content: center
+  p
+    font-size: 1.5rem
+    line-height: 3rem
+    font-weight: 550
+    color: #333
 
 #footer
   width: 100%
@@ -178,4 +82,23 @@ const register = async () => {
   p
     color: #fff
     font-size: .5rem
+
+@media (max-width: 1400px)
+  #section02
+    width: 42%
+  #section03
+    width: 42%
+
+@media (max-width: 900px)
+  #section02
+    display: none
+  #section03
+    width: 60%
+    h1
+      display: block
+      font-size: 2rem
+    padding: 0 50px
+    p
+      font-size: 1.3rem
+      line-height: 2rem
 </style>

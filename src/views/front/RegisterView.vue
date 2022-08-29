@@ -79,8 +79,7 @@
       n-icon(size="25" color="#fff" :component="TwitterSquare")
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
-  p Copyright &copy; 2022 kenli
-  p 網站為學習用途，無商業使用。圖片均取自網路
+  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
 </template>
 
 <script setup>
@@ -206,6 +205,8 @@ const register = async () => {
     background: #fff
     border: none
     margin-bottom: 30px
+  h2
+    font-size: 1.5rem
   p
     font-size: .9rem
     margin-top: 25px
@@ -240,6 +241,7 @@ const register = async () => {
   justify-content: space-evenly
   #footerIcon_box
     width: 192px
+    margin: 10px 0
     justify-content: space-between
     a
       height: 25px

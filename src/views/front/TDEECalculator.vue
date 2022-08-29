@@ -44,7 +44,7 @@
                   v-for="gender in genders"
                   :key="gender.value"
                   :value="gender.value"
-                ) {{ gender.label }}
+                ) {{              gender.label              }}
             n-form-item(
               path="age"
               label="年齡"
@@ -84,11 +84,11 @@
               )
             #text.flex.justify-content-space-between
               | TDEE 每日總消耗熱量為 :
-              h2 {{ form.value }}
               n-button(
                 attr-type="submit"
                 color="#D74B4B"
               ) 送出
+            h2 {{              form.value              }}
 #section03
 #footer.flex.D-column
   #footerIcon_section.flex
@@ -212,6 +212,9 @@ const submitForm = () => {
     color: #fff
     font-size: 1rem
     font-weight: bold
+  h2
+    margin: 12px 0 0 25px
+    font-size: 3rem
 
 #calculator_hr
   width: 151px
