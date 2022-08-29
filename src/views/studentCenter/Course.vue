@@ -10,10 +10,10 @@ n-table(:bordered="false" :single-line="false")#table
       th 報名狀態
   tbody
     tr(v-if="histories.length > 0" v-for="(history, idx) in histories" :key="history._id")
-      td {{ history.course.name }}
-      td {{ history.coachDocument.name }}
-      td {{ new Date(history.history.date).toLocaleDateString() }}
-      td {{ history.history.status === 0 ? '審查中' : history.history.status === 1 ? "報名成功" : history.history.status === 2 ? "報名未通過" : '' }}
+      td {{  history.course.name  }}
+      td {{  history.coachDocument.name  }}
+      td {{  new Date(history.history.date).toLocaleDateString()  }}
+      td {{  history.history.status === 0 ? '審查中' : history.history.status === 1 ? "報名成功" : history.history.status === 2 ? "報名未通過" : ''  }}
     tr(v-else) 
       td(colspan='4' style="text-align: center") 沒有課程
 
@@ -31,7 +31,6 @@ const init = async () => {
     const { data } = await apiAuth.get('/users/histories')
     histories.push(...data.result.histories)
   } catch (error) {
-    console.log(error)
     Swal.fire({
       icon: 'error',
       title: '失敗',

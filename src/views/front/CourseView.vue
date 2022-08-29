@@ -13,11 +13,11 @@
           n-card
             template(#cover)
               img(:src="course.image")
-            h2 {{ course.name }}
-            h3 運動項目: {{ course.category }}
-            h3 上課地點: {{ course.place }}
-            h3 上課時段: {{ course.time }}
-            h3 價錢: $ {{ course.price }} / 堂
+            h2 {{     course.name     }}
+            h3 運動項目: {{     course.category     }}
+            h3 上課地點: {{     course.place     }}
+            h3 上課時段: {{     course.time     }}
+            h3 價錢: $ {{     course.price     }} / 堂
       n-gi(v-else)
         n-card(style="text-align: center;") 沒有課程
     n-pagination(v-model:page="currentPage" :page-count="Math.ceil(courses.length / pageSize)")
@@ -39,18 +39,19 @@ n-modal(
 )
   #modal.flex.D-column
     #modalSection01.flex.D-column.align-items-flex-start
-      h1 {{ form.name }}
+      h1 {{     form.name     }}
       img(:src="form.image")
-      h3 教練: {{ form.coachName }}
-      h3 課程地點: {{ form.place }}
-      h3 課程時段: {{ form.time }}
-      h3 課程價錢: $ {{ form.price }} / 堂
+      h3 教練: {{     form.coachName     }}
+      h3 課程地點: {{     form.place     }}
+      h3 課程時段: {{     form.time     }}
+      h3 課程價錢: $ {{     form.price     }} / 堂
       h2 課程介紹
-      h4 {{ form.description }}
+      h4 {{     form.description     }}
       #btnSection.flex
         n-button(
           color="#D74B4B"
           @click="registration()"
+          :loding="form.submitting"
         ) 立即報名
 </template>
 
@@ -117,6 +118,7 @@ const registration = async () => {
       title: '成功',
       text: '報名成功'
     })
+    form.submitting = false
   } catch (error) {
     form.showModal = false
     Swal.fire({
@@ -124,6 +126,7 @@ const registration = async () => {
       title: '失敗',
       text: (error.response.data.message === 'No auth token') ? '登入後才能報名' : (error.isAxiosError && error.response.data) ? error.response.data.message : '發生錯誤'
     })
+    form.submitting = false
   }
 }
 

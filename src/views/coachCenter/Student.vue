@@ -36,9 +36,9 @@ n-modal(
         th 審查
     tbody
       tr(v-if="doc.length > 0" v-for="(item, idx) in sliceDoc" :key="item._id")
-        td {{ item.studentDocument.name }}
-        td {{ item.course.name }}
-        td {{ item.status === 0 ? "審查中" : item.status === 1 ? "報名成功" : item.status === 2 ? "報名請求退回" : "" }}
+        td {{  item.studentDocument.name  }}
+        td {{  item.course.name  }}
+        td {{  item.status === 0 ? "審查中" : item.status === 1 ? "報名成功" : item.status === 2 ? "報名請求退回" : ""  }}
         td 
           n-button(color="#475F77" @click="openModal(item._id, idx + ((currentPage - 1) * pageSize))")
             n-icon(size="25" color="#fff" :component="EditCalendarOutlined"
@@ -106,8 +106,6 @@ const submitForm = async () => {
   }
   try {
     const { data } = await apiAuth.patch('/users/history/' + form._id, dataForm)
-    console.log(data.result)
-    console.log(doc[form.idx].status)
     doc[form.idx].status = data.result.status
     Swal.fire({
       icon: 'success',

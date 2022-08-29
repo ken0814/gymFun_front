@@ -7,7 +7,7 @@ n-modal(
   :mask-closable="true"
   preset="card"
 )#admin-course-modal
-  h3 {{ form._id.length > 0 ? '編輯課程' : '新增課程' }}
+  h3 {{  form._id.length > 0 ? '編輯課程' : '新增課程'  }}
   n-form(
     ref="formRef"
     :model="form"
@@ -113,7 +113,7 @@ n-modal(
       tr(v-if="courses.length > 0" v-for='(course, idx) in sliceCourses' :key="course._id")
         td 
           img(:src="course.image")
-        td {{ course.name }}
+        td {{  course.name  }}
         td(v-if="currentPage === 1")
           n-button(
             @click="openDialog(course._id, idx)"
@@ -222,7 +222,6 @@ const submitForm = async () => {
   try {
     if (form._id.length === 0) {
       const { data } = await apiAuth.post('/courses', fd)
-      console.log(data)
       courses.push(data.result)
       courseId.course = data.result._id
       await apiAuth.post('users/course', courseId)
