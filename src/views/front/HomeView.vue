@@ -15,7 +15,7 @@
   )
     n-gi.flex.D-column
       p 
-        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="userLength" /> +
+        | <n-number-animation ref="numberAnimationInstRef" :from="0" :to="20" /> +
       p
         |運動愛好者
       RouterLink(to="/register")
@@ -71,10 +71,9 @@ import { ref, reactive } from 'vue';
 
 const advertises = reactive([])
 
-const usersLength = ref(0)
 const coursesLength = ref(0)
 const coachLength = ref(0)
-const userLength = usersLength.value + coachLength.value
+const studentLength = ref(0)
 
 const init = async () => {
   try {
@@ -104,19 +103,19 @@ const getCourseLength = async () => {
 }
 getCourseLength()
 
-const getUserLength = async () => {
-  try {
-    const { data } = await api.get('/users/all')
-    usersLength.value = data.result.length
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: '失敗',
-      text: error.isAxiosError ? error.response.data.message : error.message
-    })
-  }
-}
-getUserLength()
+// const getUserLength = async () => {
+//   try {
+//     const { data } = await api.get('/users/all')
+//     usersLength.value = data.result.length
+//   } catch (error) {
+//     Swal.fire({
+//       icon: 'error',
+//       title: '失敗',
+//       text: error.isAxiosError ? error.response.data.message : error.message
+//     })
+//   }
+// }
+// getUserLength()
 
 const getCoachLength = async () => {
   try {
@@ -132,11 +131,10 @@ const getCoachLength = async () => {
 }
 
 getCoachLength()
-
 const getStudentLength = async () => {
   try {
     const { data } = await api.get('users/student')
-    usersLength.value = data.final.length
+    studentLength.value = data.final.length
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -245,6 +243,9 @@ button:hover
     
   #section03
     margin-bottom: 50px
+    .n-card
+      img
+        height: 200px
 
 @media (max-width: 768px)
   #section01

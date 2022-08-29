@@ -136,17 +136,18 @@ init()
 .n-grid
   gap:30px !important
 
-.n-card
-  background: rgba(255,255,255, 0.4)
-  border: none
-  border-radius: 8px
-  box-shadow: 0 0 10px #475F77
-  img
-    width: 100%
-    height: 200px
-    object-fit: cover
-    margin-bottom: 10px
-    border-radius: 8px 8px 0 0
+#section01
+  .n-card
+    background: rgba(255,255,255, 0.4)
+    border: none
+    border-radius: 8px
+    box-shadow: 0 0 10px #475F77
+    img
+      width: 100%
+      height: 200px
+      object-fit: contain
+      margin-bottom: 10px
+      border-radius: 8px 8px 0 0
 
 .n-card:hover
   transform: scale(1.02)
@@ -177,7 +178,7 @@ init()
   img
     width: 300px
     height: 300px
-    object-fit: cover
+    object-fit: contain
     border-radius: 5px
     // margin-bottom: 10px
     margin: 10px auto
@@ -186,7 +187,6 @@ init()
   button
     margin-top: 10px
     font-size: 1rem
-    
 
 #modalSection01
   h1
@@ -194,6 +194,9 @@ init()
     top: 25px
     left: 50%
     transform: translateX(-50%)
+  h4
+    font-size: 14.5px
+    text-align: justify
 
 #btnSection
   width: 100%
