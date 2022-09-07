@@ -93,7 +93,7 @@ n-modal(
         v-if="form._id.length > 0"
         color="#D74B4B"
         :loading="form.submitting"
-        @click="del(form._id)"
+        @click="del(form._id, form.idx)"
       ) 刪除
       n-button(
         color="#DCDDD8"
@@ -242,7 +242,7 @@ const openDialog = (_id, idx) => {
     form.place = courses[idx].place
     form.sell = courses[idx].sell
     form.description = courses[idx].description
-    form.coachId = courses[idx].coachId
+    form.coachId = courses[idx].coach._id
   } else {
     form.name = ''
     form.price = 0
@@ -260,7 +260,11 @@ const openDialog = (_id, idx) => {
 
 const del = async (_id, idx) => {
   try {
-    await apiAuth.delete('/courses/' + _id)
+    await apiAuth.delete('/courses/' + _id, {
+      data: {
+        coachId: form.coachId
+      }
+    })
     Swal.fire({
       icon: 'success',
       title: '成功',
@@ -280,7 +284,7 @@ const del = async (_id, idx) => {
 
 const init = async () => {
   try {
-    const { data } = await apiAuth.get('/courses/all')
+    const { data } = await apiAuth.get('/courses/all', form.coachId)
     courses.push(...data.result)
   } catch (error) {
     Swal.fire({
