@@ -273,5 +273,7 @@ const register = async () => {
 
   #section03
     width: 80%
-    height: 580px
+    height: 500px
+    :deep .n-form-item-feedback-wrapper
+      min-height: 10px !important
 </style>
