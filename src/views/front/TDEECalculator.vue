@@ -292,7 +292,7 @@ const submitForm = () => {
     height: 1450px
     transform: translateY(-23%)
 
-@media (max-width: 390px)
+@media (max-width: 414px)
   .container
     width: 80%
     height: 1440px
@@ -304,7 +304,7 @@ const submitForm = () => {
     height: 560px
 
   #section03
-    height: 1350px
-    transform: translateY(-22.5%)
+    height: 1330px
+    transform: translateY(-17.5%)
 
 </style>

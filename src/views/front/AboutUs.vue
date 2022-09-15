@@ -105,4 +105,12 @@ const router = useRouter()
     p
       font-size: 1.3rem
       line-height: 2rem
+
+@media (max-width: 414px)
+  #section01
+    height: 380px
+
+  #section03
+    height: 450px
+    padding: 0 30px
 </style>

@@ -204,7 +204,7 @@ const login = () => {
   #register
     display: block
 
-@media (max-width: 390px)
+@media (max-width: 414px)
   #section01
     height: 400px
 
