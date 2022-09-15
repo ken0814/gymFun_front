@@ -17,7 +17,10 @@
       n-icon(size="25" color="#fff" :component="TwitterSquare")
     a(href="https://line.me/zh-hant/")
       n-icon(size="25" color="#fff" :component="Line")
-  p Copyright &copy; 2022 kenli &nbsp; 網站為學習用途，無商業使用。圖片、文字均取自網路
+  p 
+    | Copyright &copy; 2022 kenli &nbsp; 
+    br
+    | 網站為學習用途，無商業使用。圖片、文字均取自網路
 </template>
 
 <script setup>
@@ -34,7 +37,7 @@ const router = useRouter()
 <style lang="sass" scoped>
 .container
   width: 100%
-  height: calc( 100vh - 144px )
+  height: calc( 100vh - 164px )
 
 #section01
   width: 100%
@@ -70,7 +73,7 @@ const router = useRouter()
 
 #footer
   width: 100%
-  height: 70px
+  height: 90px
   background: #354B5E
   justify-content: space-evenly
   #footerIcon_box
@@ -82,6 +85,7 @@ const router = useRouter()
   p
     color: #fff
     font-size: .5rem
+    text-align: center
 
 @media (max-width: 1400px)
   #section02
