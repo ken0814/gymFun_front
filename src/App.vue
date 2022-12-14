@@ -23,6 +23,7 @@ const themeOverrides = {
 }
 
 useUserStore().getUser()
+// watch 來 watch 去的
 </script>
 <template lang="pug">
 n-config-provider(
